@@ -1,5 +1,6 @@
 package com.springdatajpa.springdatajpa.service;
 
+import com.springdatajpa.springdatajpa.dto.TodoDto;
 import com.springdatajpa.springdatajpa.entity.Todo;
 import com.springdatajpa.springdatajpa.entity.User;
 import com.springdatajpa.springdatajpa.exception.ResourceNotFoundException;
@@ -20,24 +21,33 @@ public class TodoService {
     }
 
 
-    public Todo getTodoById(Long id) {
-        return todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
+    public TodoDto getTodoById(Long id) {
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
+        return convertToDto(todo);
     }
 
-    public List<Todo> getAllTodos() {
-        return todoRepository.findAll();
+    public List<TodoDto> getAllTodos() {
+        return todoRepository.findAll().stream().map(todo -> convertToDto(todo)).toList();
     }
 
-    public Todo updateTodo(Long id, Todo todoReq) {
+    public TodoDto updateTodo(Long id, Todo todoReq) {
         Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
 
         todo.setTitle(todoReq.getTitle());
         todo.setCompleted(todoReq.getCompleted());
-        return todoRepository.save(todo);
+        return convertToDto(todoRepository.save(todo));
     }
 
     public void deleteTodo(Long id) {
         Todo todo = todoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
         todoRepository.deleteById(id);
+    }
+
+    private TodoDto convertToDto(Todo todo) {
+        TodoDto dto = new TodoDto();
+        dto.setId(todo.getId());
+        dto.setTitle(todo.getTitle());
+        dto.setCompleted(todo.getCompleted());
+        return dto;
     }
 }

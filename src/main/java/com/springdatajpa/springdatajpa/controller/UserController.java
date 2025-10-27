@@ -1,5 +1,7 @@
 package com.springdatajpa.springdatajpa.controller;
 
+import com.springdatajpa.springdatajpa.dto.TodoDto;
+import com.springdatajpa.springdatajpa.dto.UserDto;
 import com.springdatajpa.springdatajpa.entity.Todo;
 import com.springdatajpa.springdatajpa.entity.User;
 import com.springdatajpa.springdatajpa.service.UserService;
@@ -19,22 +21,22 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll(){
+    public ResponseEntity<List<UserDto>> getAll(){
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id){
+    public ResponseEntity<UserDto> getById(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.getUserById(id));
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user){
+    public ResponseEntity<UserDto> save(@RequestBody User user){
         return ResponseEntity.ok().body(userService.saveUser(user));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User user){
+    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody User user){
         return ResponseEntity.ok().body(userService.updateUser(id, user));
     }
 
@@ -45,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/todos")
-    public ResponseEntity<List<Todo>> getTodosByUserId(@PathVariable Long id){
+    public ResponseEntity<List<TodoDto>> getTodosByUserId(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.getTodosByUserId(id));
     }
 

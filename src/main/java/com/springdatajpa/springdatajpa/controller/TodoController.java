@@ -1,5 +1,6 @@
 package com.springdatajpa.springdatajpa.controller;
 
+import com.springdatajpa.springdatajpa.dto.TodoDto;
 import com.springdatajpa.springdatajpa.entity.Todo;
 import com.springdatajpa.springdatajpa.service.TodoService;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,23 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> getAll(){
+    public ResponseEntity<List<TodoDto>> getAll(){
         return ResponseEntity.ok().body(todoService.getAllTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Todo> getById(@PathVariable Long id){
+    public ResponseEntity<TodoDto> getById(@PathVariable Long id){
         return ResponseEntity.ok().body(todoService.getTodoById(id));
     }
-    
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TodoDto> update(@PathVariable Long id, @RequestBody Todo todo){
+        return ResponseEntity.ok().body(todoService.updateTodo(id, todo));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        todoService.deleteTodo(id);
+        return ResponseEntity.noContent().build();
+    }
 }
